@@ -22,6 +22,15 @@ class MangaChaptersController: BaseController {
         collectionView?.contentInset = UIEdgeInsetsMake(0, 0, 58, 0)
         collectionView?.scrollIndicatorInsets = collectionView!.contentInset
         
+        self.navigationItem.title = "Boku Wa No Mari"
+        
+        setupChapters()
+        reloadCollectionView()
+        
+        setupDownloadButton()
+    }
+    
+    private func setupChapters() {
         let documentsFolderPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
         
         let manager = NSFileManager.defaultManager()
@@ -40,9 +49,6 @@ class MangaChaptersController: BaseController {
         }
         
         datasource = MangaChapters(chapters: chapters)
-        reloadCollectionView()
-        
-        setupDownloadButton()
     }
     
     let downloadButton: UIButton = {
@@ -97,22 +103,31 @@ class MangaChaptersController: BaseController {
         let downloader = MangaDownloader()
         var chapters = (self.datasource as? MangaChapters)?.chapters!
         let numChapters = chapters!.count
-        downloader.downloadChapter(numChapters + 1, page: 0) { (error) -> () in
-            self.downloadButton.enabled = true
-            self.downloadButton.alpha = 1
+        
+        downloader.downloadChapter(numChapters + 1, page: 0, completion: { () -> () in
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.downloadButton.enabled = true
+                self.downloadButton.alpha = 1
+            })
+            
+            self.navigationItem.title = "Boku Wa No Mari"
             
             print("finished downloading")
-            let fileManager = NSFileManager.defaultManager()
             
-            let path = "chapter\(numChapters + 1)/".stringByPrependingDocumentPath()
-            for element in fileManager.enumeratorAtPath(path)!.allObjects {
+            let chapterString = String(format: "%03d", numChapters + 1)
+            let path = chapterString.stringByPrependingDocumentPath()
+            for element in NSFileManager.defaultManager().enumeratorAtPath(path)!.allObjects {
                 print(element)
             }
             
-            chapters!.append("chapter\(numChapters + 1)")
+            chapters!.append(chapterString)
             
             self.datasource = MangaChapters(chapters: chapters)
             self.reloadCollectionView()
+            }) { (pageNumber) -> () in
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.navigationItem.title = "Downloading \(pageNumber)"
+                })
         }
     }
 

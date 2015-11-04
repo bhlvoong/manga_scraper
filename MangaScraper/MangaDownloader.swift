@@ -10,7 +10,9 @@ import UIKit
 
 class MangaDownloader: NSObject {
 
-    func downloadChapter(chapter: Int, page: Int, completion: () ->()) {
+    func downloadChapter(chapter: Int, page: Int, completion: () ->(), progress: (pageNumber: Int) -> ()) {
+        
+        progress(pageNumber: page)
         
 //        if page == 10 {
 //            completion()
@@ -18,7 +20,8 @@ class MangaDownloader: NSObject {
 //        }
         
         print("Downloading page: \(page)")
-        let pageUrl = "http://www.mangahere.co/manga/boku_wa_mari_no_naka/c00\(chapter)/\(page).html"
+        let chapterString = String(format: "%03d", chapter)
+        let pageUrl = "http://www.mangahere.co/manga/boku_wa_mari_no_naka/c\(chapterString)/\(page).html"
         
         getImageUrlFromPageUrl(pageUrl, completion: { (imageUrl, error) -> () in
             
@@ -34,7 +37,7 @@ class MangaDownloader: NSObject {
                 
                 self.saveImageForUrl(imageUrl!, chapter: chapter)
                 
-                self.downloadChapter(chapter, page: page + 1, completion: completion)
+                self.downloadChapter(chapter, page: page + 1, completion: completion, progress: progress)
                 
             } else {
                 print("Could not find imageUrl for page: \(pageUrl)")
@@ -47,7 +50,8 @@ class MangaDownloader: NSObject {
     
     private func createDirectoryForChapter(chapter: Int) {
         let fileManager = NSFileManager.defaultManager()
-        try!fileManager.createDirectoryAtPath("chapter\(chapter)".stringByPrependingDocumentPath(), withIntermediateDirectories: true, attributes: nil)
+        let chapterString = String(format: "%03d", chapter)
+        try!fileManager.createDirectoryAtPath(chapterString.stringByPrependingDocumentPath(), withIntermediateDirectories: true, attributes: nil)
     }
     
     private func saveImageForUrl(url: String, chapter: Int) {
@@ -59,22 +63,28 @@ class MangaDownloader: NSObject {
             
             if data != nil {
                 let fileName = self.getFilenameFromImageUrl(url)
-                let path = "chapter\(chapter)/\(fileName)".stringByPrependingDocumentPath()
+                let chapterString = String(format: "%03d", chapter)
+                let path = "\(chapterString)/\(fileName)".stringByPrependingDocumentPath()
                 data!.writeToFile(path, atomically: true)
                 
                 let image = UIImage(data: data!)
-                let thumbnailSize = CGSizeMake(image!.size.width / 4, image!.size.height / 4)
-                UIGraphicsBeginImageContext(thumbnailSize)
-                image?.drawInRect(CGRectMake(0, 0, thumbnailSize.width, thumbnailSize.height))
-                let thumbnailImage = UIGraphicsGetImageFromCurrentImageContext()
-                UIGraphicsEndImageContext()
+                let thumbnailImage = self.generateThumbnailForImage(image!)
                 
                 let thumbnailData = NSData(data: UIImagePNGRepresentation(thumbnailImage)!)
-                let thumbnailPath = "chapter\(chapter)/thumbnail_\(fileName)".stringByPrependingDocumentPath()
+                let thumbnailPath = "\(chapterString)/thumbnail_\(fileName)".stringByPrependingDocumentPath()
                 thumbnailData.writeToFile(thumbnailPath, atomically: true)
                 
             }
             }.resume()
+    }
+    
+    private func generateThumbnailForImage(image: UIImage) -> UIImage {
+        let thumbnailSize = CGSizeMake(image.size.width / 3, image.size.height / 3)
+        UIGraphicsBeginImageContext(thumbnailSize)
+        image.drawInRect(CGRectMake(0, 0, thumbnailSize.width, thumbnailSize.height))
+        let thumbnailImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return thumbnailImage
     }
     
     private func getFilenameFromImageUrl(imageUrl: String) -> String {
