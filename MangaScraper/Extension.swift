@@ -39,3 +39,10 @@ extension UIColor {
         return UIColor(red: red/255.0, green: green/255.0, blue: blue/255.0, alpha: 1)
     }
 }
+
+extension String {
+    func stringByPrependingDocumentPath() -> String {
+        let documentsFolderPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
+        return NSString(string: documentsFolderPath).stringByAppendingPathComponent(self)
+    }
+}

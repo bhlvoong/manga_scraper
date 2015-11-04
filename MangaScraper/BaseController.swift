@@ -48,7 +48,9 @@ class BaseController: UICollectionViewController, UICollectionViewDelegateFlowLa
     }
     
     func reloadCollectionView() {
-        collectionView?.reloadData()
+        dispatch_async(dispatch_get_main_queue()) { () -> Void in
+            self.collectionView?.reloadData()
+        }
         activityIndicatorView.stopAnimating()
     }
     

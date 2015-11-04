@@ -16,7 +16,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         
-        let controller = ViewController(nibName: nil, bundle: nil)
+        let controller = MangaChaptersController(nibName: nil, bundle: nil)
         
         window?.rootViewController = UINavigationController(rootViewController: controller)
 //        UIApplication.sharedApplication().keyWindow?.makeKeyAndVisible()

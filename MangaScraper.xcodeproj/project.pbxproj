@@ -7,8 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C78919CA1BE6FE4D002DC563 /* PageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78919C91BE6FE4D002DC563 /* PageController.swift */; };
+		C78919CC1BE88118002DC563 /* ChapterPageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78919CB1BE88118002DC563 /* ChapterPageController.swift */; };
+		C78919CE1BE88D3C002DC563 /* MangaChaptersController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78919CD1BE88D3C002DC563 /* MangaChaptersController.swift */; };
+		C78919D01BE892F9002DC563 /* MangaDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78919CF1BE892F9002DC563 /* MangaDownloader.swift */; };
 		C78F39741BE5E4E400710036 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78F39731BE5E4E400710036 /* AppDelegate.swift */; };
-		C78F39761BE5E4E400710036 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78F39751BE5E4E400710036 /* ViewController.swift */; };
+		C78F39761BE5E4E400710036 /* ChapterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C78F39751BE5E4E400710036 /* ChapterController.swift */; };
 		C78F39791BE5E4E400710036 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C78F39771BE5E4E400710036 /* Main.storyboard */; };
 		C78F397B1BE5E4E400710036 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C78F397A1BE5E4E400710036 /* Assets.xcassets */; };
 		C78F397E1BE5E4E400710036 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C78F397C1BE5E4E400710036 /* LaunchScreen.storyboard */; };
@@ -38,9 +42,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C78919C91BE6FE4D002DC563 /* PageController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageController.swift; sourceTree = "<group>"; };
+		C78919CB1BE88118002DC563 /* ChapterPageController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChapterPageController.swift; sourceTree = "<group>"; };
+		C78919CD1BE88D3C002DC563 /* MangaChaptersController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MangaChaptersController.swift; sourceTree = "<group>"; };
+		C78919CF1BE892F9002DC563 /* MangaDownloader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MangaDownloader.swift; sourceTree = "<group>"; };
 		C78F39701BE5E4E400710036 /* MangaScraper.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MangaScraper.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C78F39731BE5E4E400710036 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		C78F39751BE5E4E400710036 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		C78F39751BE5E4E400710036 /* ChapterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChapterController.swift; sourceTree = "<group>"; };
 		C78F39781BE5E4E400710036 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		C78F397A1BE5E4E400710036 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C78F397D1BE5E4E400710036 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -106,7 +114,7 @@
 			isa = PBXGroup;
 			children = (
 				C78F39731BE5E4E400710036 /* AppDelegate.swift */,
-				C78F39751BE5E4E400710036 /* ViewController.swift */,
+				C78F39751BE5E4E400710036 /* ChapterController.swift */,
 				C78F39771BE5E4E400710036 /* Main.storyboard */,
 				C78F397A1BE5E4E400710036 /* Assets.xcassets */,
 				C78F397C1BE5E4E400710036 /* LaunchScreen.storyboard */,
@@ -115,6 +123,10 @@
 				C78F39A31BE6114B00710036 /* Extension.swift */,
 				C78F39A51BE6117600710036 /* BaseCell.swift */,
 				C78F39A71BE6119100710036 /* Datasource.swift */,
+				C78919C91BE6FE4D002DC563 /* PageController.swift */,
+				C78919CB1BE88118002DC563 /* ChapterPageController.swift */,
+				C78919CD1BE88D3C002DC563 /* MangaChaptersController.swift */,
+				C78919CF1BE892F9002DC563 /* MangaDownloader.swift */,
 			);
 			path = MangaScraper;
 			sourceTree = "<group>";
@@ -269,10 +281,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				C78F39A81BE6119100710036 /* Datasource.swift in Sources */,
-				C78F39761BE5E4E400710036 /* ViewController.swift in Sources */,
+				C78F39761BE5E4E400710036 /* ChapterController.swift in Sources */,
 				C78F39A21BE6111F00710036 /* BaseController.swift in Sources */,
+				C78919CA1BE6FE4D002DC563 /* PageController.swift in Sources */,
+				C78919CE1BE88D3C002DC563 /* MangaChaptersController.swift in Sources */,
+				C78919D01BE892F9002DC563 /* MangaDownloader.swift in Sources */,
 				C78F39741BE5E4E400710036 /* AppDelegate.swift in Sources */,
 				C78F39A61BE6117600710036 /* BaseCell.swift in Sources */,
+				C78919CC1BE88118002DC563 /* ChapterPageController.swift in Sources */,
 				C78F39A41BE6114B00710036 /* Extension.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -500,6 +516,7 @@
 				C78F399A1BE5E4E400710036 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		C78F399B1BE5E4E400710036 /* Build configuration list for PBXNativeTarget "MangaScraperTests" */ = {
 			isa = XCConfigurationList;
@@ -508,6 +525,7 @@
 				C78F399D1BE5E4E400710036 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		C78F399E1BE5E4E400710036 /* Build configuration list for PBXNativeTarget "MangaScraperUITests" */ = {
 			isa = XCConfigurationList;
@@ -516,6 +534,7 @@
 				C78F39A01BE5E4E400710036 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
