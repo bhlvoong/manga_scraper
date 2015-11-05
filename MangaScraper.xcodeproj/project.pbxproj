@@ -93,10 +93,10 @@
 		C78919D11BEB5881002DC563 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				C78F39751BE5E4E400710036 /* ChapterController.swift */,
-				C78919C91BE6FE4D002DC563 /* PageController.swift */,
-				C78919CB1BE88118002DC563 /* ChapterPageController.swift */,
 				C78919CD1BE88D3C002DC563 /* MangaChaptersController.swift */,
+				C78F39751BE5E4E400710036 /* ChapterController.swift */,
+				C78919CB1BE88118002DC563 /* ChapterPageController.swift */,
+				C78919C91BE6FE4D002DC563 /* PageController.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
