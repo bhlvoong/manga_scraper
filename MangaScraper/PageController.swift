@@ -27,11 +27,17 @@ class PageController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.backgroundColor = UIColor.whiteColor()
+        view.backgroundColor = UIColor.blackColor()
 
         view.addSubview(imageView)
         view.addConstraintsWithFormat("H:|[v0]|", views: [imageView])
         view.addConstraintsWithFormat("V:|[v0]|", views: [imageView])
+        
+        view.addGestureRecognizer(UITapGestureRecognizer(target: self, action: "tap"))
+    }
+    
+    func tap() {
+        dismissViewControllerAnimated(true, completion: nil)
     }
 
 }

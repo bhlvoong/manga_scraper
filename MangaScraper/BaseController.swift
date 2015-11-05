@@ -17,19 +17,22 @@ class BaseController: UICollectionViewController, UICollectionViewDelegateFlowLa
     
     var datasource: Datasource? {
         didSet {
-            if datasource != nil {
-                for clazz in datasource!.cellClasses() {
-                    collectionView?.registerClass(clazz)
-                }
-                
-                for clazz in datasource!.headerClasses() {
-                    collectionView?.registerHeaderClass(clazz)
-                }
-                
-                for clazz in datasource!.footerClasses() {
-                    collectionView?.registerFooterClass(clazz)
-                }
+            guard let source = datasource else {
+                return
             }
+            
+            for clazz in source.cellClasses() {
+                collectionView?.registerClass(clazz)
+            }
+            
+            for clazz in source.headerClasses() {
+                collectionView?.registerHeaderClass(clazz)
+            }
+            
+            for clazz in source.footerClasses() {
+                collectionView?.registerFooterClass(clazz)
+            }
+
         }
     }
     

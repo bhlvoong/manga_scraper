@@ -13,9 +13,26 @@ class ChapterPageController: UIPageViewController, UIPageViewControllerDataSourc
     var chapter: String?
     var filename: String?
     var pages: [String]?
+    
+    let doneButton: UIButton = {
+        let button = UIButton()
+        button.setTitle("DONE", forState: .Normal)
+        button.setTitleColor(UIColor.whiteColor(), forState: .Normal)
+        button.layer.borderColor = UIColor.whiteColor().CGColor
+        button.layer.borderWidth = 1
+        button.layer.cornerRadius = 3
+        button.titleLabel?.font = UIFont.boldSystemFontOfSize(14)
+        return button
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        view.addSubview(doneButton)
+        view.addConstraintsWithFormat("H:[v0(60)]-12-|", views: [doneButton])
+        view.addConstraintsWithFormat("V:|-20-[v0(30)]", views: [doneButton])
+        
+        doneButton.addTarget(self, action: "done", forControlEvents: .TouchUpInside)
         
         automaticallyAdjustsScrollViewInsets = false
         edgesForExtendedLayout = .None
@@ -26,6 +43,10 @@ class ChapterPageController: UIPageViewController, UIPageViewControllerDataSourc
         pageController.chapter = chapter
         pageController.filename = filename
         setViewControllers([pageController], direction: .Forward, animated: true, completion: nil)
+    }
+    
+    func done() {
+        dismissViewControllerAnimated(true, completion: nil)
     }
     
     func pageViewController(pageViewController: UIPageViewController, viewControllerBeforeViewController viewController: UIViewController) -> UIViewController? {

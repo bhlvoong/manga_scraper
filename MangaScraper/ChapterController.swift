@@ -67,7 +67,7 @@ class ChapterController: BaseController {
         controller.chapter = chapter
         controller.filename = filename
         controller.pages = mangaPages.pages
-        navigationController?.pushViewController(controller, animated: true)
+        presentViewController(controller, animated: true, completion: nil)
     }
     
     func collectionView(collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAtIndex section: Int) -> UIEdgeInsets {

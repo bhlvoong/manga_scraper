@@ -12,12 +12,9 @@ class MangaDownloader: NSObject {
 
     func downloadChapter(chapter: Int, page: Int, completion: () ->(), progress: (pageNumber: Int) -> ()) {
         
-        progress(pageNumber: page)
-        
-//        if page == 10 {
-//            completion()
-//            return
-//        }
+        dispatch_async(dispatch_get_main_queue()) { () -> Void in
+            progress(pageNumber: page)
+        }
         
         print("Downloading page: \(page)")
         let chapterString = String(format: "%03d", chapter)
@@ -27,7 +24,9 @@ class MangaDownloader: NSObject {
             
             if error != nil {
                 print("Failed to get imageUrl from pageUrl \(pageUrl): \(error?.description)")
-                completion()
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    completion()
+                })
             }
             
             if imageUrl != nil {
@@ -42,7 +41,9 @@ class MangaDownloader: NSObject {
             } else {
                 print("Could not find imageUrl for page: \(pageUrl)")
                 //assume we are done
-                completion()
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    completion()
+                })
             }
             
         })

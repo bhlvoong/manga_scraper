@@ -22,7 +22,7 @@ class MangaChaptersController: BaseController {
         collectionView?.contentInset = UIEdgeInsetsMake(0, 0, 58, 0)
         collectionView?.scrollIndicatorInsets = collectionView!.contentInset
         
-        self.navigationItem.title = "Boku Wa No Mari"
+        self.navigationItem.title = "Boku wa Mari no Naka"
         
         setupChapters()
         reloadCollectionView()
@@ -100,17 +100,21 @@ class MangaChaptersController: BaseController {
         downloadButton.enabled = false
         downloadButton.alpha = 0.5
         
+        guard var chapters = (self.datasource as? MangaChapters)?.chapters! else {
+            return
+        }
+        
         let downloader = MangaDownloader()
-        var chapters = (self.datasource as? MangaChapters)?.chapters!
-        let numChapters = chapters!.count
+        let numChapters = chapters.count
+        
+        var chaptersWithDownloadingPlaceholder = chapters
+        chaptersWithDownloadingPlaceholder.append("Downloading...")
+        datasource = MangaChapters(chapters: chaptersWithDownloadingPlaceholder)
+        collectionView?.insertItemsAtIndexPaths([NSIndexPath(forItem: chaptersWithDownloadingPlaceholder.count - 1, inSection: 0)])
         
         downloader.downloadChapter(numChapters + 1, page: 0, completion: { () -> () in
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                self.downloadButton.enabled = true
-                self.downloadButton.alpha = 1
-            })
-            
-            self.navigationItem.title = "Boku Wa No Mari"
+            self.downloadButton.enabled = true
+            self.downloadButton.alpha = 1
             
             print("finished downloading")
             
@@ -120,14 +124,28 @@ class MangaChaptersController: BaseController {
                 print(element)
             }
             
-            chapters!.append(chapterString)
+            chapters.append(chapterString)
             
             self.datasource = MangaChapters(chapters: chapters)
-            self.reloadCollectionView()
+            self.collectionView?.reloadItemsAtIndexPaths([NSIndexPath(forItem: chapters.count - 1, inSection: 0)])
+            
             }) { (pageNumber) -> () in
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    self.navigationItem.title = "Downloading \(pageNumber)"
-                })
+                self.updateDownloadStatusWithPageNumber(pageNumber)
+        }
+    }
+    
+    private func updateDownloadStatusWithPageNumber(pageNumber: Int) {
+        guard let chapters = (datasource as? MangaChapters)?.chapters,
+            lastChapter = chapters.last else {
+            return
+        }
+        
+        if lastChapter.containsString("Downloading") {
+            var updatedChapters = chapters
+            updatedChapters.removeLast()
+            updatedChapters.append("Downloading \(pageNumber)")
+            datasource = MangaChapters(chapters: updatedChapters)
+            collectionView?.reloadItemsAtIndexPaths([NSIndexPath(forItem: updatedChapters.count - 1, inSection: 0)])
         }
     }
 
@@ -146,7 +164,14 @@ class MangaChapters: Datasource {
     }
     
     override func cellClasses() -> [AnyClass] {
-        return [MangaChapterCell.self]
+        return [MangaChapterCell.self, MangaChapterDownloadingCell.self]
+    }
+    
+    override func cellClassForIndexPath(indexPath: NSIndexPath) -> AnyClass? {
+        if chapters![indexPath.item].containsString("Downloading") {
+            return MangaChapterDownloadingCell.self
+        }
+        return MangaChapterCell.self
     }
     
     override func objectForIndexPath(indexPath: NSIndexPath) -> AnyObject? {
@@ -199,7 +224,12 @@ class MangaChapterCell: BaseCell {
             }
             
             let path = "\(chapter)/\(firstThumbnail)".stringByPrependingDocumentPath()
-            imageView.image = UIImage(contentsOfFile: path)
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)) { () -> Void in
+                let image = UIImage(contentsOfFile: path)
+                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                    self.imageView.image = image
+                })
+            }
         }
     }
     
@@ -218,4 +248,44 @@ class MangaChapterCell: BaseCell {
         return nil
     }
     
+}
+
+class MangaChapterDownloadingCell: BaseCell {
+    
+    let activityIndicatorView: UIActivityIndicatorView = {
+        let aiv = UIActivityIndicatorView(activityIndicatorStyle: .WhiteLarge)
+        aiv.startAnimating()
+        aiv.hidesWhenStopped = true
+        aiv.color = UIColor.darkGrayColor()
+        return aiv
+    }()
+    
+    let statusLabel: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFontOfSize(14)
+        label.text = "Downloading"
+        label.textAlignment = .Center
+        return label
+    }()
+    
+    override func setupViews() {
+        super.setupViews()
+        
+        addSubview(activityIndicatorView)
+        addSubview(statusLabel)
+        
+        addConstraintsWithFormat("H:|[v0]|", views: [activityIndicatorView])
+        addConstraintsWithFormat("H:|[v0]|", views: [statusLabel])
+        addConstraintsWithFormat("V:|[v0][v1(24)]|", views: [activityIndicatorView, statusLabel])
+    }
+    
+    override var datasourceItem: AnyObject? {
+        didSet {
+            guard let status = datasourceItem as? String else {
+                return
+            }
+            
+            statusLabel.text = status
+        }
+    }
 }
