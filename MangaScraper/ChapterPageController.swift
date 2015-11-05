@@ -21,7 +21,7 @@ class ChapterPageController: UIPageViewController, UIPageViewControllerDataSourc
         button.layer.borderColor = UIColor.whiteColor().CGColor
         button.layer.borderWidth = 1
         button.layer.cornerRadius = 3
-        button.titleLabel?.font = UIFont.boldSystemFontOfSize(14)
+        button.titleLabel?.font = UIFont.boldSystemFontOfSize(12)
         return button
     }()
 
@@ -30,7 +30,7 @@ class ChapterPageController: UIPageViewController, UIPageViewControllerDataSourc
         
         view.addSubview(doneButton)
         view.addConstraintsWithFormat("H:[v0(60)]-12-|", views: [doneButton])
-        view.addConstraintsWithFormat("V:|-20-[v0(30)]", views: [doneButton])
+        view.addConstraintsWithFormat("V:|-28-[v0(28)]", views: [doneButton])
         
         doneButton.addTarget(self, action: "done", forControlEvents: .TouchUpInside)
         
@@ -73,6 +73,10 @@ class ChapterPageController: UIPageViewController, UIPageViewControllerDataSourc
         controller.chapter = chapter
         controller.filename = pages![index + 1]
         return controller
+    }
+    
+    override func preferredStatusBarStyle() -> UIStatusBarStyle {
+        return .LightContent
     }
 
 }

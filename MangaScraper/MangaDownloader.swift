@@ -10,6 +10,7 @@ import UIKit
 
 class MangaDownloader: NSObject {
 
+    //this method is called recursively completely download a chapter, page by page
     func downloadChapter(chapter: Int, page: Int, completion: () ->(), progress: (pageNumber: Int) -> ()) {
         
         dispatch_async(dispatch_get_main_queue()) { () -> Void in
